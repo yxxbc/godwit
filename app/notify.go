@@ -277,6 +277,20 @@ func (a *App) finishBatch() {
 // batchPending reports whether the Sync All in flight still waits on the account.
 func (a *App) batchPending(id int64) bool { return a.syncBatch != nil && a.syncBatch.pending[id] }
 
+// LightBackground reports the setting the settings page and the tray show.
+func (a *App) LightBackground() bool { return a.settings.LightBackground }
+
+// SetLightBackground turns the setting on or off, as the settings page's
+// switch does; the tray's checkbox calls it.
+func (a *App) SetLightBackground(on bool) {
+	if a.settings.LightBackground == on {
+		return
+	}
+	st := a.settings
+	st.LightBackground = on
+	a.changeSettings(st)
+}
+
 // KeepInBackground reports whether closing the window only hides it: 后台常驻
 // is on, or an enabled rule runs in the background.
 func (a *App) KeepInBackground() bool {

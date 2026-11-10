@@ -483,6 +483,11 @@ func (r *reader) aiTools(c *ui.Context) {
 	if r.taskReady("translate") {
 		aiButton("languages", i18n.T("reader.ai.translate"), r.trShown(st), false).OnClick(func() { r.toggleTranslate(m.ID) })
 	}
+	if r.aiReady() {
+		aiButton("quote", i18n.T("reader.ai.quote"), false, false).OnClick(func() {
+			r.p.a.askWit(i18n.T("reader.ai.quote_ask"), m)
+		})
+	}
 	var skills []core.SkillInfo
 	if r.aiReady() {
 		skills = r.skills.v

@@ -356,10 +356,14 @@ func gui(ctx context.Context, dataDir string) int {
 		}
 		updateMenu()
 		trayMenu := func() *mygo.Menu {
+			light := &mygo.MenuItem{Label: i18n.T("tray.light_background"), Type: mygo.MenuItemCheckbox, Checked: a.LightBackground(),
+				Click: func(item *mygo.MenuItem, _ *mygo.Window) { a.SetLightBackground(item.IsChecked()) }}
+			plat.trayLight = light
 			items := []*mygo.MenuItem{
 				{Label: i18n.T("tray.open"), Click: func(*mygo.MenuItem, *mygo.Window) { plat.ShowWindow() }},
 				{Label: i18n.T("mail.compose"), Click: compose},
 				{Label: i18n.T("tray.sync_all"), Click: func(*mygo.MenuItem, *mygo.Window) { a.SyncAll() }},
+				light,
 				mygo.Separator(),
 				{Label: i18n.T("tray.hide"), Click: func(*mygo.MenuItem, *mygo.Window) { a.HideTrayIcon() }},
 				mygo.Separator(),

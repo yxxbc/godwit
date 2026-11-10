@@ -17,6 +17,7 @@ import (
 	"github.com/godwit-email/godwit/core"
 	"github.com/godwit-email/godwit/core/ai"
 	"github.com/godwit-email/godwit/core/coretest"
+	"github.com/godwit-email/godwit/internal/i18n"
 	"github.com/godwit-email/godwit/internal/richtext"
 )
 
@@ -814,5 +815,29 @@ func TestSummaryAutolinkEndsAtCJK(t *testing.T) {
 	}
 	if !slices.Equal(dests, []string{"https://vishnuai.in/mediakit"}) {
 		t.Errorf("links = %q", dests)
+	}
+}
+
+// The reader's 引用给 AI hands the message read, quoted, to a new Wit
+// conversation, with a first question about it.
+func TestReaderQuoteToWit(t *testing.T) {
+	h, acc, _ := aiHarness(t, false, func(st *core.Settings) { st.DefaultModel = "test/m1" })
+	var asked string
+	var quoted []core.MessageSummary
+	h.app.SetWitAsk(func(q string, ms ...core.MessageSummary) { asked, quoted = q, ms })
+	m := h.deliverOne(acc, coretest.Msg("bob@example.com", acc.Email, "Plan", "first words"))
+	h.app.OpenMessage(m.ID)
+	h.see(i18n.T("reader.ai.quote"))
+
+	h.click(i18n.T("reader.ai.quote"))
+
+	if h.app.route.Page != PageWit {
+		t.Fatalf("route %+v, want the Wit page", h.app.route)
+	}
+	if asked != i18n.T("reader.ai.quote_ask") {
+		t.Fatalf("asked %q, want %q", asked, i18n.T("reader.ai.quote_ask"))
+	}
+	if len(quoted) != 1 || quoted[0].ID != m.ID {
+		t.Fatalf("quoted %+v, want message %d", quoted, m.ID)
 	}
 }

@@ -62,3 +62,25 @@ func TestLightBackgroundSettingApplies(t *testing.T) {
 		t.Fatal("the setting off kept the sync narrow")
 	}
 }
+
+// The tray's checkbox calls SetLightBackground, which saves the setting the
+// settings page's switch shows.
+func TestSetLightBackgroundSaves(t *testing.T) {
+	h := newHarness(t)
+	h.until("settings loaded", func() bool { return h.app.loaded })
+	h.app.foreground = false
+
+	h.app.SetLightBackground(false)
+	if h.env.Svc.LightBackground() {
+		t.Fatal("the setting off kept the sync narrow")
+	}
+	h.until("the setting saved off", func() bool {
+		st, err := h.env.Svc.GetSettings(context.Background())
+		return err == nil && !st.LightBackground
+	})
+
+	h.app.SetLightBackground(true)
+	if !h.env.Svc.LightBackground() {
+		t.Fatal("the setting on did not narrow the sync")
+	}
+}

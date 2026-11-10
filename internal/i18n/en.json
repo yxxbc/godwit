@@ -840,6 +840,8 @@
   "reader_ai_copied": "Copied",
   "reader_ai_more_skills": "More skills",
   "reader_ai_no_translation": "Already in {arg1}; no translation needed",
+  "reader_ai_quote": "Ask AI about this",
+  "reader_ai_quote_ask": "What is this email about, and what should I watch for?",
   "@reader_ai_no_translation": {
     "placeholders": {
       "arg1": {
@@ -2341,6 +2343,7 @@
   "toast_close": "Close",
   "tray_hide": "Hide menu bar icon",
   "tray_hidden_toast": "Menu bar icon hidden. You can turn it back on in Settings.",
+  "tray_light_background": "Light background",
   "tray_open": "Open Godwit",
   "tray_quit": "Quit",
   "tray_sync_all": "Sync all accounts now",
