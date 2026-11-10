@@ -25,7 +25,7 @@ func TestSettingsDefaults(t *testing.T) {
 	got, err := s.GetSettings(t.Context())
 	require.NoError(t, err)
 	assert.Equal(t, Settings{Theme: "system", Density: "compact", FontSize: 14, SettingsVersion: 4, ReplyLanguage: "match",
-		KeepInBackground: true, ShowTrayIcon: true, UnreadOnAppIcon: true, NotifyNewMail: true, NotifyPreview: true, ThreadView: true, ThreadCollapse: true, ThreadCollapseThreshold: 5, RemoteImages: "auto", AutoLabel: true, LabelDisplay: "both", JudgeThreshold: 0.8,
+		KeepInBackground: true, ShowTrayIcon: true, UnreadOnAppIcon: true, NotifyNewMail: true, NotifyPreview: true, ThreadView: true, ThreadCollapse: true, ThreadCollapseThreshold: 5, RemoteImages: "auto", AutoLabel: true, LabelDisplay: "both", JudgeThreshold: 0.8, LightBackground: true,
 		MCPSend: "confirm", Masking: true, MaskCategories: defaultMaskCategories(),
 		SecurityWarnings: true, VerifiedBadge: true, ProxyMode: "system"}, got)
 }

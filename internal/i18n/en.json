@@ -1834,6 +1834,8 @@
   "settings_language": "Language",
   "settings_launch_at_login": "Open at login",
   "settings_launch_at_login_help": "Starts Godwit in the background after login",
+  "settings_light_background": "Light background",
+  "settings_light_background_help": "Only the inbox syncs while the window is behind another app; the other folders catch up when you come back",
   "settings_local_api": "Local API",
   "settings_local_api_client_off": "Disconnected {arg1}.",
   "settings_local_api_client_on": "Connected {arg1}. Restart it to use Godwit.",

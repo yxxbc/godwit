@@ -980,6 +980,8 @@
   "settings_language": "Sprache",
   "settings_launch_at_login": "Bei Anmeldung starten",
   "settings_launch_at_login_help": "Startet Godwit nach der Anmeldung im Hintergrund",
+  "settings_light_background": "Leichter Hintergrund",
+  "settings_light_background_help": "Im Hintergrund wird nur der Posteingang abgeglichen; die anderen Ordner folgen, sobald Sie zurückkehren",
   "settings_local_api": "Lokale API",
   "settings_local_api_client_off": "{arg1} getrennt.",
   "settings_local_api_client_on": "{arg1} verbunden. Starte es neu, um Godwit zu nutzen.",

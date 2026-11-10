@@ -92,12 +92,21 @@ func (r *result) merged(target int64, others []int64) {
 	r.changedThreads = append(r.changedThreads, target)
 }
 
-// Fetch syncs every folder of the account over c: folder list, new messages
+// FetchOptions narrow one round. The zero value syncs every folder.
+type FetchOptions struct {
+	// InboxOnly syncs the inbox and no other folder: a background round,
+	// where only what arrives matters, still gets new mail for its
+	// notification while the other folders wait for a full round. The round
+	// ends after the inbox, so the passes over every folder are skipped.
+	InboxOnly bool
+}
+
+// Fetch syncs the account's folders over c: folder list, new messages
 // (headers and text parts only; attachments stay lazy), threading, remote flag
 // changes and expunges. Rows committed before an error are still announced.
 // more reports that a range backfill used its pages for the round and has
 // work left: the caller should sync again soon.
-func Fetch(ctx context.Context, db *store.DB, c *imapclient.Client, accountID int64, bus *events.Bus) (more bool, err error) {
+func Fetch(ctx context.Context, db *store.DB, c *imapclient.Client, accountID int64, bus *events.Bus, opts FetchOptions) (more bool, err error) {
 	var r result
 	complete := false
 	defer func() {
@@ -115,10 +124,14 @@ func Fetch(ctx context.Context, db *store.DB, c *imapclient.Client, accountID in
 	if err != nil {
 		return false, err
 	}
-	if c.Caps().Has(capGmail) {
+	gmail := c.Caps().Has(capGmail)
+	if gmail && !opts.InboxOnly {
 		if err := mergeOld(ctx, db, c, a, folders, &r); err != nil {
 			return false, err
 		}
+	}
+	if opts.InboxOnly {
+		folders = slices.DeleteFunc(folders, func(f *folder) bool { return f.role != "inbox" })
 	}
 	// A folder the server refuses is skipped, so it cannot hold back the
 	// others' arrivals round after round; a broken connection still stops here.
@@ -137,7 +150,11 @@ func Fetch(ctx context.Context, db *store.DB, c *imapclient.Client, accountID in
 	if refused != nil { // a skipped folder may yet hold a membership, a claim or a stale location
 		return r.more, refused
 	}
-	gmail := c.Caps().Has(capGmail)
+	if opts.InboxOnly {
+		// The passes below decide over every folder — locations, orphans,
+		// claims — and a round that read one folder cannot; a full round does.
+		return r.more, nil
+	}
 	if gmail {
 		if err := keepInAllMail(ctx, db, c, accountID, &r); err != nil {
 			return r.more, err

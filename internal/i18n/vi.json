@@ -975,6 +975,8 @@
   "settings_language": "Ngôn ngữ",
   "settings_launch_at_login": "Mở khi đăng nhập máy",
   "settings_launch_at_login_help": "Khởi động Godwit trong nền sau khi bạn đăng nhập",
+  "settings_light_background": "Nền nhẹ",
+  "settings_light_background_help": "Khi ở nền, chỉ Hộp thư đến được đồng bộ; các thư mục khác đồng bộ khi bạn quay lại",
   "settings_local_api": "Local API",
   "settings_local_api_client_off": "Đã ngắt kết nối {arg1}.",
   "settings_local_api_client_on": "Đã kết nối {arg1}. Khởi động lại để dùng Godwit.",

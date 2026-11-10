@@ -59,6 +59,9 @@ func (a *App) changeSettings(st core.Settings) {
 
 // settingsEffects tells the platform and the catalog what changed from old to st.
 func (a *App) settingsEffects(old, st core.Settings) {
+	if st.LightBackground != old.LightBackground {
+		a.applyLightBackground(st)
+	}
 	if st.RemoteImages != old.RemoteImages {
 		a.mail.reader.invalidateAvatars(true)
 	}
@@ -276,6 +279,7 @@ func (p *settingsPage) generalView(c *ui.Context) {
 	startup := []func(){
 		sw(&st.LaunchAtLogin, i18n.T("settings.launch_at_login"), i18n.T("settings.launch_at_login.help")),
 		sw(&st.KeepInBackground, i18n.T("settings.keep_in_background"), i18n.T("settings.keep_in_background.help")),
+		sw(&st.LightBackground, i18n.T("settings.light_background"), i18n.T("settings.light_background.help")),
 		sw(&st.UnreadOnAppIcon, i18n.T("settings.unread_on_app_icon"), ""),
 		sw(&st.ShowTrayIcon, i18n.T("settings.show_tray_icon"), i18n.T("settings.show_tray_icon.help")),
 	}

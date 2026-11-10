@@ -975,6 +975,8 @@
   "settings_language": "语言",
   "settings_launch_at_login": "开机时自动启动",
   "settings_launch_at_login_help": "登录后在后台启动 Godwit",
+  "settings_light_background": "轻量后台",
+  "settings_light_background_help": "窗口在后台时只同步收件箱，回到窗口后再补齐其他文件夹",
   "settings_local_api": "本机 API",
   "settings_local_api_client_off": "已断开 {arg1}。",
   "settings_local_api_client_on": "已接入 {arg1}，重启它后生效。",

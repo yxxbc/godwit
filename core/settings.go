@@ -28,11 +28,14 @@ type Settings struct {
 	NoTranslate                                                    []string
 	LaunchAtLogin, KeepInBackground, ShowTrayIcon, UnreadInMenuBar bool
 	UnreadOnAppIcon                                                bool
-	NotifyNewMail, NotifyPreview                                   bool
-	QuickReplies, Summary, ThreadView                              bool
-	ThreadCollapse                                                 bool // collapse runs of folded messages into an expandable card
-	ThreadCollapseThreshold                                        int  // a longer thread keeps its newest this many messages in sight and collapses the older; MinThreadCollapse to MaxThreadCollapse
-	DefaultModel, SmallModel                                       string
+	// LightBackground syncs the inbox only while the window is in the
+	// background; the other folders catch up when it comes back.
+	LightBackground                   bool
+	NotifyNewMail, NotifyPreview      bool
+	QuickReplies, Summary, ThreadView bool
+	ThreadCollapse                    bool // collapse runs of folded messages into an expandable card
+	ThreadCollapseThreshold           int  // a longer thread keeps its newest this many messages in sight and collapses the older; MinThreadCollapse to MaxThreadCollapse
+	DefaultModel, SmallModel          string
 	// Translator is the reader's translation channel: "" the model, or
 	// "plugin/<name>" a plugin declaring translate (ListTranslators).
 	Translator string
@@ -165,7 +168,7 @@ const (
 
 func defaultSettings() Settings {
 	return Settings{Theme: "system", Density: "compact", FontSize: 14, SettingsVersion: settingsVersion, ReplyLanguage: "match", RemoteImages: "auto",
-		KeepInBackground: true, ShowTrayIcon: true, UnreadOnAppIcon: true, NotifyNewMail: true, NotifyPreview: true, ThreadView: true,
+		KeepInBackground: true, ShowTrayIcon: true, UnreadOnAppIcon: true, NotifyNewMail: true, NotifyPreview: true, ThreadView: true, LightBackground: true,
 		ThreadCollapse: true, ThreadCollapseThreshold: DefaultThreadCollapse, AutoLabel: true, LabelDisplay: LabelDisplayBoth, JudgeThreshold: 0.8,
 		MCPSend: MCPSendConfirm, Masking: true, MaskCategories: defaultMaskCategories(),
 		SecurityWarnings: true, VerifiedBadge: true, SecurityAI: false, ProxyMode: ProxySystem}

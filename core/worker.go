@@ -266,7 +266,7 @@ func (s *Service) syncRound(ctx context.Context, id int64, wake chan struct{}) (
 	} else {
 		release() // only needed for IDLE; a second release is harmless
 	}
-	if err := s.syncNow(ctx, id, false); err != nil {
+	if err := s.syncNow(ctx, id, false, s.light.Load()); err != nil {
 		return false, err // syncNow announced it
 	}
 	if idle {

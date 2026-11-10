@@ -975,6 +975,8 @@
   "settings_language": "Langue",
   "settings_launch_at_login": "Ouvrir à la connexion",
   "settings_launch_at_login_help": "Démarre Godwit en arrière-plan après l’ouverture de session",
+  "settings_light_background": "Arrière-plan léger",
+  "settings_light_background_help": "En arrière-plan, seule la boîte de réception est synchronisée ; les autres dossiers suivent à votre retour",
   "settings_local_api": "API locale",
   "settings_local_api_client_off": "{arg1} déconnecté.",
   "settings_local_api_client_on": "{arg1} connecté. Redémarrez-le pour utiliser Godwit.",

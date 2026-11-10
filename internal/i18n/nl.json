@@ -975,6 +975,8 @@
   "settings_language": "Taal",
   "settings_launch_at_login": "Openen bij inloggen",
   "settings_launch_at_login_help": "Start Godwit op de achtergrond na het inloggen",
+  "settings_light_background": "Lichte achtergrond",
+  "settings_light_background_help": "Op de achtergrond wordt alleen de inbox gesynchroniseerd; de andere mappen volgen zodra je terugkomt",
   "settings_local_api": "Lokale API",
   "settings_local_api_client_off": "{arg1} losgekoppeld.",
   "settings_local_api_client_on": "{arg1} verbonden. Start het opnieuw om Godwit te gebruiken.",

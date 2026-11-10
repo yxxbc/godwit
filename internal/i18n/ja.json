@@ -975,6 +975,8 @@
   "settings_language": "言語",
   "settings_launch_at_login": "ログイン時に自動で開く",
   "settings_launch_at_login_help": "ログイン後にバックグラウンドで Godwit を起動します",
+  "settings_light_background": "軽量バックグラウンド",
+  "settings_light_background_help": "バックグラウンドでは受信トレイのみを同期し、戻ったときに他のフォルダーを同期します",
   "settings_local_api": "ローカル API",
   "settings_local_api_client_off": "{arg1} を切断しました。",
   "settings_local_api_client_on": "{arg1} を接続しました。再起動すると Godwit を使えます。",

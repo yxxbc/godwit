@@ -631,6 +631,13 @@ func (a *App) SetForeground(on bool) {
 	if on {
 		a.plat.ShowSignInCode(nil)
 	}
+	a.applyLightBackground(a.settings)
+}
+
+// applyLightBackground narrows the Service's syncs to the inbox while the
+// window is behind another one, if st asks for it.
+func (a *App) applyLightBackground(st core.Settings) {
+	a.svc.SetLightBackground(st.LightBackground && !a.foreground)
 }
 
 // OnUI posts f to the UI thread unless the App has closed by then, for

@@ -975,6 +975,8 @@
   "settings_language": "語言",
   "settings_launch_at_login": "登入時自動啟動",
   "settings_launch_at_login_help": "登入後在背景啟動 Godwit",
+  "settings_light_background": "輕量背景",
+  "settings_light_background_help": "視窗在背景時只同步收件匣，回到視窗後再補齊其他資料夾",
   "settings_local_api": "本機 API",
   "settings_local_api_client_off": "已斷開 {arg1}。",
   "settings_local_api_client_on": "已接入 {arg1}，重新啟動它後生效。",

@@ -975,6 +975,8 @@
   "settings_language": "Dil",
   "settings_launch_at_login": "Oturum açıldığında başlat",
   "settings_launch_at_login_help": "Oturum açıldıktan sonra Godwit’i arka planda başlatır",
+  "settings_light_background": "Hafif arka plan",
+  "settings_light_background_help": "Arka planda yalnızca gelen kutusu eşitlenir; diğer klasörler geri döndüğünüzde eşitlenir",
   "settings_local_api": "Yerel API",
   "settings_local_api_client_off": "{arg1} bağlantısı kesildi.",
   "settings_local_api_client_on": "{arg1} bağlandı. Godwit’i kullanmak için yeniden başlatın.",

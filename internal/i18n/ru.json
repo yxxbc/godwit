@@ -975,6 +975,8 @@
   "settings_language": "Язык",
   "settings_launch_at_login": "Открывать при входе в систему",
   "settings_launch_at_login_help": "Запускает Godwit в фоновом режиме после входа в систему",
+  "settings_light_background": "Лёгкий фон",
+  "settings_light_background_help": "В фоне синхронизируется только «Входящие», остальные папки — при возвращении",
   "settings_local_api": "Локальный API",
   "settings_local_api_client_off": "{arg1} отключён.",
   "settings_local_api_client_on": "{arg1} подключён. Перезапустите его, чтобы пользоваться Godwit.",

@@ -128,6 +128,7 @@ type Service struct {
 	workersMu sync.Mutex
 	workers   map[int64]*worker
 	closed    bool
+	light     atomic.Bool // background syncs cover the inbox only; the window's state (SetLightBackground)
 
 	callsMu     sync.Mutex
 	modelMu     sync.RWMutex // writers: a model service's row and key change together; readers see both or neither (ponytail: global, per-id if contended)
@@ -627,12 +628,34 @@ func (s *Service) SyncNow(ctx context.Context, accountID int64) error {
 	if local, err := s.localArchive(ctx, accountID); local || err != nil {
 		return err
 	}
-	return s.syncNow(ctx, accountID, true)
+	return s.syncNow(ctx, accountID, true, false)
 }
 
-// syncNow is SyncNow for the worker (explicit false). A cancelled sync is a
-// shutdown, not a failure.
-func (s *Service) syncNow(ctx context.Context, accountID int64, explicit bool) error {
+// SetLightBackground narrows the workers' syncs to the inbox while on: the
+// window is in the background, where only new mail needs to arrive for its
+// notification, and every other folder would cost a round each. Turning it
+// off wakes every worker so the folders catch up at once. SyncNow is never
+// narrowed: a sync the user asks for is whole.
+func (s *Service) SetLightBackground(on bool) {
+	if s.light.Swap(on) == on || on {
+		return // unchanged, or narrowed: the next rounds follow on their own
+	}
+	s.workersMu.Lock()
+	defer s.workersMu.Unlock()
+	for _, w := range s.workers {
+		select {
+		case w.wake <- struct{}{}:
+		default: // one is already pending
+		}
+	}
+}
+
+// LightBackground reports whether background syncs cover the inbox only.
+func (s *Service) LightBackground() bool { return s.light.Load() }
+
+// syncNow is SyncNow for the worker (explicit false), narrowed to the inbox
+// when light. A cancelled sync is a shutdown, not a failure.
+func (s *Service) syncNow(ctx context.Context, accountID int64, explicit, light bool) error {
 	unlock, err := s.lockAccount(ctx, accountID)
 	if err != nil {
 		return err
@@ -643,7 +666,7 @@ func (s *Service) syncNow(ctx context.Context, accountID int64, explicit bool) e
 	s.securityMu.Unlock()
 	defer func() { s.securityMu.Lock(); s.securitySyncs--; s.securityMu.Unlock() }()
 	s.bus.Publish(events.Event{Type: events.SyncStarted, AccountID: accountID})
-	if err := s.syncAccount(ctx, accountID, explicit); err != nil {
+	if err := s.syncAccount(ctx, accountID, explicit, light); err != nil {
 		if ctx.Err() == nil {
 			// Safe to show: conn never includes server text or the password in login errors.
 			s.bus.Publish(events.Event{Type: events.SyncFailed, AccountID: accountID, Error: err.Error(), Kind: string(conn.Classify(err))})
@@ -719,9 +742,10 @@ func (s *Service) dialAccount(ctx context.Context, accountID int64, h *imapclien
 	return c, func() { stop(); c.Close() }, abort, nil
 }
 
-// syncAccount runs one sync. An SMTP login failure skips the outbox but not the
-// rest; it is returned at the end, so a worker round ends and parks.
-func (s *Service) syncAccount(ctx context.Context, accountID int64, explicit bool) (err error) {
+// syncAccount runs one sync, the inbox only when light. An SMTP login failure
+// skips the outbox but not the rest; it is returned at the end, so a worker
+// round ends and parks.
+func (s *Service) syncAccount(ctx context.Context, accountID int64, explicit, light bool) (err error) {
 	c, release, _, err := s.dialAccount(ctx, accountID, nil)
 	if err != nil {
 		return err
@@ -746,7 +770,7 @@ func (s *Service) syncAccount(ctx context.Context, accountID int64, explicit boo
 	if err := s.pushOps(ctx, c, accountID, mailsync.PushOps); err != nil {
 		return err
 	}
-	more, err := mailsync.Fetch(ctx, s.db, c, accountID, s.bus)
+	more, err := mailsync.Fetch(ctx, s.db, c, accountID, s.bus, mailsync.FetchOptions{InboxOnly: light})
 	if err == nil {
 		err = s.logDaily(ctx) // daily rules run after the day's first complete sync
 	}
